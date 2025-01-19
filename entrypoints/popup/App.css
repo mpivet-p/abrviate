@@ -1,0 +1,25 @@
+#root {
+  /* max-width: 1280px; */
+  width: 100%;
+  margin: 0;
+  /* padding: 1em; */
+  text-align: center;
+}
+
+footer {
+  width: 100%;
+  padding: 1px 6px;
+}
+
+h1 {
+  user-select: none;
+}
+
+.logo {
+  user-select: none;
+}
+
+.logo-hue {
+  filter: drop-shadow(0 0 1.3em red) drop-shadow(0 0 0.5em #ff0000);
+  color: rgba(255, 0, 0, 0.675);
+}
