@@ -1,9 +1,10 @@
 import { createRoot } from 'react-dom/client';
-import { CustomDiv } from '../components/content/button';
+import { AbrviateButton } from '../components/content/AbrviateButton';
+import { Chat } from '@/components/content/Chat';
 
 export default defineContentScript({
   matches: ['*://*.youtube.com/*'],
-  main(ctx) {
+  main: async (ctx) => {
 
     console.log('Content script loaded!');
 
@@ -12,20 +13,29 @@ export default defineContentScript({
       anchor: 'body',
       onMount: (container) => {
         const root = createRoot(container);
+        root.render(<Chat />);
         addDivToThumbnails(root);
 
         const mutationObserver = new MutationObserver(() => addDivToThumbnails(root));
         mutationObserver.observe(document.body, { childList: true, subtree: true });
+      }
+    });
+    ui.autoMount();
 
+    
+    const secondaryUi = createIntegratedUi(ctx, {
+      position: 'inline',
+      anchor: 'ytd-video-preview',
+      onMount: () => {
         const previewContainer = document.querySelector('ytd-video-preview');
+
         if (previewContainer) {
           const previewObserver = new MutationObserver(previewHandler);
           previewObserver.observe(previewContainer, { childList: true, subtree: true });
         }
       }
     });
-    ui.autoMount();
-
+    secondaryUi.autoMount();
   },
 });
 
@@ -47,20 +57,20 @@ async function previewHandler(root: any) {
 }
 
 function removeFromThumbnail(thumbnail: Element) {
-  const app = thumbnail.querySelector('.custom-div');
+  const app = thumbnail.querySelector('.abrviate-button');
   if (app) {
     app.remove();
   }
 }
 
 function addToThumbnail(thumbnail: Element, root: any) {
-  if (!thumbnail.querySelector('.custom-div')) {
+  if (!thumbnail.querySelector('.abrviate-button')) {
     const container = document.createElement('div');
-    container.className = 'custom-div';
+    container.className = 'abrviate-button';
     thumbnail.appendChild(container);
 
     const appRoot = createRoot(container);
-    appRoot.render(<CustomDiv />);
+    appRoot.render(<AbrviateButton />);
   }
 }
 

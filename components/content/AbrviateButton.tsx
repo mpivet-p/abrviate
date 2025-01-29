@@ -1,12 +1,30 @@
 import React from 'react';
 
-const handleClick = () => {
-  console.log('clicked');
+const handleClick = (event: React.MouseEvent<HTMLDivElement>) => {
+  const chat = document.querySelector('.abrviate-chat') as HTMLElement;
+  if (chat) {
+    chat.classList.toggle('hidden');
+    
+    // Get the position of the clicked element
+    const { currentTarget } = event;
+    const rect = (currentTarget as HTMLElement).getBoundingClientRect();
+    console.log(currentTarget, rect);
+    const { top, left } = rect;
+    const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+    const scrollLeft = window.pageXOffset || document.documentElement.scrollLeft;
+    const trueTop = top + scrollTop;
+    const trueLeft = left + scrollLeft;
+    
+    // Set the chat position relative to the clicked element
+    chat.style.top = `${trueTop - 250}px`;
+    chat.style.left = `${trueLeft}px`;
+    chat.style.position = 'absolute'; // Ensure the position is absolute for correct placement
+  }
 };
 
-export const CustomDiv: React.FC = () => {
+export const AbrviateButton: React.FC = () => {
   return (
-    <div className="custom-div" onClick={handleClick} style={{
+    <div className="abrivate-button" onClick={handleClick} style={{
       position: 'absolute',
       margin: '.7em',
       top: '0',
@@ -16,7 +34,6 @@ export const CustomDiv: React.FC = () => {
       padding: '1em',
       borderRadius: '50%',
       backgroundColor: 'rgba(0, 0, 0, 0.5)',
-      zIndex: 9999
     }}>
       <svg id="uuid-ed7ed55a-59f9-4e2f-ab7d-cf178b2cc5ff" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 769.5 801.09" style={{
         fill: 'white'
