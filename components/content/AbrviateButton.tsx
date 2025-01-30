@@ -13,33 +13,43 @@ const resetChatPosition = (chat: HTMLElement, buttonPosition: { top: number, lef
       chat.style.left = `${trueLeft - 20}px`;
 }
 
-
 const handleClick = async (event: React.MouseEvent<HTMLDivElement>, videoUrl: string) => {
   const chat = document.querySelector('.abrviate-chat') as HTMLElement;
+
+  // Get the position of the clicked element
   const { currentTarget } = event;
+  const rect = (currentTarget as HTMLElement).getBoundingClientRect();
+  const { top, left } = rect;
 
   const chatStorage: ChatStorage | null = await getChatStorage();
+  const lastBlur: number | null = await storage.getItem('local:lastBlur');
 
-  if (chat && chatStorage) {
-    // Get the position of the clicked element
-    const rect = (currentTarget as HTMLElement).getBoundingClientRect();
-    const { top, left } = rect;
-
-    if (chatStorage.videoUrl === videoUrl && !chat.classList.contains('hidden')) {
-      chat.classList.add('hidden');
-      return;
-    }
-
-    chatStorage.videoUrl = videoUrl;
-    await setChatStorage(chatStorage);
-    resetChatPosition(chat, { top, left });
-
-    if (chat.classList.contains('hidden')) {
-      chat.classList.remove('hidden');
-    }
-
-    chat.focus();
+  if (!chat || !chatStorage || lastBlur === null) {
+    return;
   }
+
+  // If the chat is already open for the same video and the last time onBlur was less than 300ms ago, do nothing
+  if (chatStorage.videoUrl === videoUrl && lastBlur > Date.now() - 300) {
+    return;
+  }
+
+  // If the chat is already open for the same video, close it (toggle)
+  if (chatStorage.videoUrl === videoUrl && !chat.classList.contains('hidden')) {
+    chat.classList.add('hidden');
+    return;
+  }
+
+  // Updating the chat storage and position
+  chatStorage.videoUrl = videoUrl;
+  await setChatStorage(chatStorage);
+  resetChatPosition(chat, { top, left });
+
+  // If the chat is hidden, show it
+  if (chat.classList.contains('hidden')) {
+    chat.classList.remove('hidden');
+  }
+
+  chat.focus();
 };
 
 export const AbrviateButton: React.FC<{ videoUrl: string }> = ({ videoUrl }) => {

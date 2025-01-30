@@ -14,10 +14,13 @@ export default defineContentScript({
     if (typeof storedExtStatus === 'boolean' && storedExtStatus === false) {
       return;
     }
+
     await setChatStorage({
       videoUrl: '',
-      chatContent: ''
+      chatContent: '',
     });
+
+    await storage.setItem('local:lastBlur', 0);
 
     const ui = createIntegratedUi(ctx, {
       position: 'inline',
