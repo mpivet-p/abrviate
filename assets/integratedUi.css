@@ -1,0 +1,29 @@
+.abrviate-chat {
+  background-color: yellow;
+  width: 500px;
+  height: 250px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+
+  /* border-radius: 1em; */
+  /* padding: 1em; */
+  /* font-size: 2em; */
+}
+
+.abrviate-chat:focus {
+  outline: none;
+}
+
+.abrviate-button {
+  position: absolute;
+  margin: .7em;
+  top: 0;
+  left: 0;
+  width: 3em;
+  height: 3em;
+  padding: 1em;
+  border-radius: 50%;
+  background-color: rgba(0, 0, 0, 0.5);
+}

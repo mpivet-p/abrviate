@@ -2,20 +2,20 @@ import React from 'react';
 
 const handleClose = () => {
   const chat = document.querySelector('.abrviate-chat');
-  chat?.classList.toggle('hidden');
+
+  // Delay is need to prevent onBlur execution before the onClick event is executed
+  setTimeout(() => {
+    if (chat && !chat.classList.contains('hidden')) {
+      chat.classList.add('hidden');
+      console.log("Hidden");
+    }
+  }, 100);
+
 };
 
 export const Chat: React.FC = () => {
   return (
-    <div className="abrviate-chat hidden" tabIndex={0} onBlur={handleClose} style={{
-      width: '500px',
-      height: '250px',
-      backgroundColor: 'blue',
-      position: 'fixed',
-      top: '0',
-      left: '0',
-      zIndex: 1000
-    }}>
+    <div className="abrviate-chat hidden" tabIndex={0} onBlur={handleClose}>
       <p>Chat</p>
       <p onClick={handleClose} style={{
         position: 'absolute',
